@@ -19,24 +19,51 @@ function find() {
     return db('schemes');
 }
 
-function findById() {
-    return null;
+/**
+ - `findById(id)`:
+  - Expects a scheme `id` as its only parameter.
+  - Resolve to a single scheme object.
+  - On an invalid `id`, resolves to `null`.
+ */
+function findById(id) {
+    return db('schemes')
+    .where({id}).first();
 }
 
-function findSteps() {
-    return null;
+/**
+ - `findSteps(id)`:
+  - Expects a scheme `id`.
+  - Resolves to an array of all correctly ordered step for the given scheme: `[ { id: 17, scheme_name: 'Find the Holy Grail', step_number: 1, instructions: 'quest'}, { id: 18, scheme_name: 'Find the Holy Grail', step_number: 2, instructions: '...and quest'}, etc. ]`.
+  - This array should include the `scheme_name` _not_ the `scheme_id`.
+ */
+function findSteps(id) {
+    return db('steps as s')
+    .join('schemes as sc', 's.scheme_id', 'sc.id')
+    .select('s.id', 'sc.scheme_name', 's.step_number', 's.instructions')
+    .where('s.scheme_id', '=', id)
+    .orderBy('s.step_number')
 }
 
-function add() {
-    return null;
+/**
+ `add(scheme)`:
+  - Expects a scheme object.
+  - Inserts scheme into the database.
+  - Resolves to the newly inserted scheme, including `id`.
+ */
+function add(schemeData) {
+    return db('schemes').insert(schemeData)
+    .then(id => {
+        return findById(id[0])
+    })
 }
 
-function addStep() {
-    return null;
-}
+// function addStep() {
+//     return null;
+// }
 
-function update() {
-    return null;
+
+function update(id, obj) {
+    return 
 }
 
 function remove() {

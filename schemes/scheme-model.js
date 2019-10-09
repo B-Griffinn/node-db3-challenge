@@ -10,7 +10,6 @@ module.exports = {
     findById,
     findSteps,
     add,
-    addStep,
     update,
     remove
 }
@@ -61,11 +60,35 @@ function add(schemeData) {
 //     return null;
 // }
 
+/*
+`update(changes, id)`:
+  - Expects a changes object and an `id`.
+  - Updates the scheme with the given id.
+  - Resolves to the newly updated scheme object.
 
-function update(id, obj) {
-    return 
+  my SQL:
+    UPDATE schemes
+    SET scheme_name = "New Name"
+    WHERE id = 5
+*/
+// id = req.params.id
+// obj = req.body
+function update(obj, id) {
+    return db('schemes')
+    .update('scheme_name', obj.scheme_name)
+    .where({id})
+    .then(() => {
+        return findById(id)
+    })
 }
 
+/*
+`remove(id)`:
+  - Removes the scheme object with the provided id.
+  - Resolves to the removed scheme
+  - Resolves to `null` on an invalid id.
+  - (Hint: Only worry about removing the `scheme`. The database is configured to automatically remove all associated steps.)
+*/
 function remove() {
     return null;
 }

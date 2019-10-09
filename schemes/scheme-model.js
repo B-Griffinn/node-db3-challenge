@@ -89,6 +89,12 @@ function update(obj, id) {
   - Resolves to `null` on an invalid id.
   - (Hint: Only worry about removing the `scheme`. The database is configured to automatically remove all associated steps.)
 */
-function remove() {
-    return null;
+function remove(id) {
+    return db('schemes')
+    .del()
+    .where({id})
+    .then(() => {
+       return find(id) 
+    })
+    
 }
